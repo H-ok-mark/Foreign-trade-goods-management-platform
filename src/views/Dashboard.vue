@@ -192,12 +192,12 @@
                             <el-table-column
                                 prop="goodsName"
                                 label="货物名称"
-                                width="150"
+                                width="100"
                             ></el-table-column>
                             <el-table-column
                                 prop="totalAmount"
                                 label="总金额"
-                                width="120"
+                                width="80"
                             >
                                 <template #default="scope">
                                     <span class="text-success"
@@ -280,7 +280,7 @@
 </template>
 
 <script setup>
-    import { ref, onMounted, nextTick } from 'vue';
+    import { ref, onMounted, nextTick, watch, onUnmounted } from 'vue';
     import * as echarts from 'echarts';
     import {
         ArrowUp,
@@ -566,6 +566,7 @@
             ],
         };
         chart.setOption(option);
+        return chart;
     };
 
     // 初始化库存趋势图表
@@ -617,15 +618,49 @@
             ],
         };
         chart.setOption(option);
+        return chart;
     };
+
+    // 图表实例
+    let goodsTypeChart = null;
+    let inventoryTrendChart = null;
 
     // 初始化图表
     const initCharts = () => {
         nextTick(() => {
-            initGoodsTypeChart();
-            initInventoryTrendChart();
+            goodsTypeChart = initGoodsTypeChart();
+            inventoryTrendChart = initInventoryTrendChart();
         });
     };
+
+    // 响应窗口大小变化
+    const handleResize = () => {
+        if (goodsTypeChart) {
+            goodsTypeChart.resize();
+        }
+        if (inventoryTrendChart) {
+            inventoryTrendChart.resize();
+        }
+    };
+
+    // 更新图表数据
+    const updateCharts = () => {
+        if (goodsTypeChart) {
+            goodsTypeChart.dispose();
+        }
+        if (inventoryTrendChart) {
+            inventoryTrendChart.dispose();
+        }
+        initCharts();
+    };
+
+    // 监听时间范围变化
+    watch(
+        () => timeRange.value,
+        () => {
+            updateCharts();
+        }
+    );
 
     // 获取状态类型
     const getStatusType = status => {
@@ -646,6 +681,18 @@
     // 页面加载
     onMounted(() => {
         initCharts();
+        window.addEventListener('resize', handleResize);
+    });
+
+    // 页面卸载
+    onUnmounted(() => {
+        window.removeEventListener('resize', handleResize);
+        if (goodsTypeChart) {
+            goodsTypeChart.dispose();
+        }
+        if (inventoryTrendChart) {
+            inventoryTrendChart.dispose();
+        }
     });
 </script>
 
@@ -756,9 +803,6 @@
         width: 100%;
         height: calc(100% - 70px);
         min-height: 350px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
     .table-row {
