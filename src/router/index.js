@@ -6,7 +6,7 @@ import DashboardVue from '@/views/Dashboard.vue'
 import GoodsManagementVue from '@/views/GoodsManagement.vue'
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory('/Foreign-trade-goods-management-platform/'),
     routes: [
         { path: '/login', component: LoginVue },
         { path: '/register', component: RegisterVue },

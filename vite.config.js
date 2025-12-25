@@ -6,6 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/Foreign-trade-goods-management-platform/',
   plugins: [
     vue(),
     vueDevTools({
