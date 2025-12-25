@@ -6,7 +6,7 @@
             class="layout-aside"
             :class="{ collapsed: isSidebarCollapsed }"
         >
-            <div class="aside-logo">
+            <div class="aside-logo" @click="toggleSidebar">
                 <el-icon class="logo-icon">
                     <Goods></Goods>
                 </el-icon>
@@ -17,51 +17,39 @@
             <el-menu
                 router
                 :default-active="currentRoute"
-                class="layout-menu"
                 :collapse="isSidebarCollapsed"
                 :collapse-transition="false"
+                class="layout-menu"
+                text-color="#606266"
+                active-text-color="#409eff"
             >
                 <el-menu-item index="/dashboard">
-                    <template #title>
-                        <el-icon><House /></el-icon>
-                        <span>仪表盘</span>
-                    </template>
+                    <el-icon><House /></el-icon>
+                    <template #title>货物总览</template>
                 </el-menu-item>
                 <el-menu-item index="/goods-management">
-                    <template #title>
-                        <el-icon><Goods /></el-icon>
-                        <span>货物管理</span>
-                    </template>
+                    <el-icon><Goods /></el-icon>
+                    <template #title>货物管理</template>
                 </el-menu-item>
                 <el-menu-item index="/inventory-management">
-                    <template #title>
-                        <el-icon><Grid /></el-icon>
-                        <span>库存管理</span>
-                    </template>
+                    <el-icon><Grid /></el-icon>
+                    <template #title>库存管理</template>
                 </el-menu-item>
                 <el-menu-item index="/order-management">
-                    <template #title>
-                        <el-icon><Tickets /></el-icon>
-                        <span>订单管理</span>
-                    </template>
+                    <el-icon><Tickets /></el-icon>
+                    <template #title>订单管理</template>
                 </el-menu-item>
                 <el-menu-item index="/customer-management">
-                    <template #title>
-                        <el-icon><User /></el-icon>
-                        <span>客户管理</span>
-                    </template>
+                    <el-icon><User /></el-icon>
+                    <template #title>客户管理</template>
                 </el-menu-item>
                 <el-menu-item index="/product-management">
-                    <template #title>
-                        <el-icon><Collection /></el-icon>
-                        <span>产品管理</span>
-                    </template>
+                    <el-icon><Collection /></el-icon>
+                    <template #title>产品管理</template>
                 </el-menu-item>
                 <el-menu-item index="/data-report">
-                    <template #title>
-                        <el-icon><Document /></el-icon>
-                        <span>数据报表</span>
-                    </template>
+                    <el-icon><Document /></el-icon>
+                    <template #title>数据报表</template>
                 </el-menu-item>
             </el-menu>
         </el-aside>
@@ -71,10 +59,60 @@
             <!-- 顶部栏 -->
             <el-header class="layout-header">
                 <div class="header-left">
-                    <el-icon class="toggle-sidebar" @click="toggleSidebar">
-                        {{ isSidebarCollapsed ? 'Menu' : 'Fold' }}
-                    </el-icon>
-                    <el-breadcrumb class="breadcrumb" separator="/">
+                    <!-- 侧边栏折叠时显示导航菜单 -->
+                    <el-menu
+                        v-if="isSidebarCollapsed"
+                        router
+                        :default-active="currentRoute"
+                        class="top-nav-menu"
+                        mode="horizontal"
+                        @select="handleNavSelect"
+                    >
+                        <el-menu-item index="/dashboard">
+                            <template #title>
+                                <el-icon><House /></el-icon>
+                                <span>货物总览</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item index="/goods-management">
+                            <template #title>
+                                <el-icon><Goods /></el-icon>
+                                <span>货物管理</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item index="/inventory-management">
+                            <template #title>
+                                <el-icon><Grid /></el-icon>
+                                <span>库存管理</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item index="/order-management">
+                            <template #title>
+                                <el-icon><Tickets /></el-icon>
+                                <span>订单管理</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item index="/customer-management">
+                            <template #title>
+                                <el-icon><User /></el-icon>
+                                <span>客户管理</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item index="/product-management">
+                            <template #title>
+                                <el-icon><Collection /></el-icon>
+                                <span>产品管理</span>
+                            </template>
+                        </el-menu-item>
+                        <el-menu-item index="/data-report">
+                            <template #title>
+                                <el-icon><Document /></el-icon>
+                                <span>数据报表</span>
+                            </template>
+                        </el-menu-item>
+                    </el-menu>
+                    <!-- 侧边栏展开时显示面包屑导航 -->
+                    <el-breadcrumb v-else class="breadcrumb" separator="/">
                         <el-breadcrumb-item :to="{ path: '/' }"
                             >首页</el-breadcrumb-item
                         >
@@ -144,7 +182,7 @@
 
     // 路由名称映射
     const routeNames = {
-        '/dashboard': '仪表盘',
+        '/dashboard': '货物总览',
         '/goods-management': '货物管理',
         '/inventory-management': '库存管理',
         '/order-management': '订单管理',
@@ -162,6 +200,11 @@
     const userInfo = computed(() => {
         return userStore.userInfo;
     });
+
+    // 导航菜单选择事件
+    const handleNavSelect = index => {
+        router.push(index);
+    };
 
     // 退出登录
     const handleLogout = () => {
@@ -182,12 +225,14 @@
     .layout-container {
         height: 100vh;
         background-color: #f5f7fa;
+        border: none;
     }
 
     .layout-aside {
         background-color: #304156;
         border-right: none;
-        transition: width 0.3s;
+        /* transition: width; */
+        border: none;
     }
 
     .aside-logo {
@@ -197,6 +242,13 @@
         height: 60px;
         background-color: #263445;
         color: #fff;
+        cursor: pointer;
+        /* transition: all 0.3s; */
+        border-bottom: none;
+    }
+
+    .aside-logo:hover {
+        background-color: #1e2a38;
     }
 
     .logo-icon {
@@ -206,7 +258,7 @@
     }
 
     .logo-text {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 600;
     }
 
@@ -214,6 +266,7 @@
         border-right: none;
         background-color: #304156;
         color: #bfcbd9;
+        border: none;
     }
 
     .el-menu-item {
@@ -236,6 +289,7 @@
     .layout-main-container {
         display: flex;
         flex-direction: column;
+        border: none;
     }
 
     .layout-header {
@@ -246,6 +300,7 @@
         align-items: center;
         justify-content: space-between;
         z-index: 10;
+        border-bottom: none;
     }
 
     .header-left {
@@ -267,6 +322,29 @@
 
     .breadcrumb {
         font-size: 14px;
+    }
+
+    .top-nav-menu {
+        border-bottom: none;
+        background-color: transparent;
+        border: none;
+    }
+
+    .top-nav-menu .el-menu-item {
+        color: #666;
+        border-bottom: 2px solid transparent;
+        margin: 0;
+    }
+
+    .top-nav-menu .el-menu-item:hover {
+        background-color: #f5f7fa;
+        color: #409eff;
+    }
+
+    .top-nav-menu .el-menu-item.is-active {
+        background-color: transparent;
+        color: #409eff;
+        border-bottom-color: #409eff;
     }
 
     .header-right {
@@ -301,7 +379,8 @@
     .layout-content {
         padding: 20px;
         flex: 1;
-        overflow-y: auto;
+        /* 移除overflow-y: auto，避免内容区域出现滚动条 */
+        border: none;
     }
 
     /* 响应式设计 */

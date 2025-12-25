@@ -90,6 +90,10 @@
                 :data="goodsList"
                 v-loading="loading"
                 @selection-change="handleSelectionChange"
+                stripe
+                border
+                size="
+                medium"
                 style="width: 100%"
             >
                 <el-table-column type="selection" width="55"></el-table-column>
@@ -125,7 +129,7 @@
                 <el-table-column
                     prop="inventoryNumber"
                     label="库存数量"
-                    width="100"
+                    width="120"
                     sortable
                 ></el-table-column>
                 <el-table-column
@@ -146,29 +150,39 @@
                     width="160"
                     sortable
                 ></el-table-column>
-                <el-table-column label="操作" width="180" fixed="right">
+                <el-table-column
+                    label="操作"
+                    width="180"
+                    fixed="right"
+                    align="center"
+                >
                     <template #default="scope">
-                        <el-button
-                            type="primary"
-                            size="small"
-                            @click="handleView(scope.row)"
-                        >
-                            查看
-                        </el-button>
-                        <el-button
-                            type="success"
-                            size="small"
-                            @click="handleEdit(scope.row)"
-                        >
-                            编辑
-                        </el-button>
-                        <el-button
-                            type="danger"
-                            size="small"
-                            @click="handleDelete(scope.row)"
-                        >
-                            删除
-                        </el-button>
+                        <div class="row-actions">
+                            <el-button
+                                type="primary"
+                                size="medium"
+                                link
+                                @click="handleView(scope.row)"
+                            >
+                                查看
+                            </el-button>
+                            <el-button
+                                type="success"
+                                size="medium"
+                                link
+                                @click="handleEdit(scope.row)"
+                            >
+                                编辑
+                            </el-button>
+                            <el-button
+                                type="danger"
+                                size="medium"
+                                link
+                                @click="handleDelete(scope.row)"
+                            >
+                                删除
+                            </el-button>
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -811,6 +825,15 @@
         margin-bottom: 20px;
     }
 
+    .row-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        line-height: 1;
+    }
+
     .pagination {
         margin-top: 20px;
         text-align: right;
@@ -830,6 +853,10 @@
 
         .action-bar .el-button {
             margin-right: 0;
+        }
+
+        .row-actions {
+            justify-content: flex-start;
         }
     }
 </style>
