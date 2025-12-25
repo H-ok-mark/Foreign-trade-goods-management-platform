@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginVue from '@/views/Login.vue'
+import RegisterVue from '@/views/Register.vue'
 import LayoutVue from '@/views/Layout.vue'
 import DashboardVue from '@/views/Dashboard.vue'
 import GoodsManagementVue from '@/views/GoodsManagement.vue'
@@ -8,6 +9,7 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         { path: '/login', component: LoginVue },
+        { path: '/register', component: RegisterVue },
         {
             path: '/',
             component: LayoutVue,

@@ -56,6 +56,10 @@
                         立即登录
                     </el-button>
                 </el-form-item>
+                <div class="login-footer">
+                    <span>还没有账户？</span>
+                    <a href="#" @click.prevent="handleRegister">立即注册</a>
+                </div>
             </el-form>
         </div>
     </div>
@@ -117,6 +121,11 @@
 
     // 初始化验证码
     refreshCaptcha();
+
+    // 跳转到注册页面
+    const handleRegister = () => {
+        router.push('/register');
+    };
 
     // 登录方法
     const handleLogin = async () => {
@@ -215,6 +224,24 @@
         height: 40px;
         font-size: 16px;
         font-weight: 500;
+    }
+
+    .login-footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #606266;
+    }
+
+    .login-footer a {
+        color: #409eff;
+        text-decoration: none;
+        margin-left: 8px;
+    }
+
+    .login-footer a:hover {
+        text-decoration: underline;
+        color: #66b1ff;
     }
 
     /* 响应式设计 */
